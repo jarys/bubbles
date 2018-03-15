@@ -11,7 +11,7 @@ import loader
 import json
 
 #key.symbol_string(key.O)
-NOTHING = Structure([])
+'''NOTHING = Structure([])
 BUBBLE = [Structure([Bubble((0, 0), i)]) for i in range(5)]
 NEG = Structure(loader.load('doubleneg.txt')[0])
 OR = Structure(loader.load('doubleor.txt')[0])
@@ -19,11 +19,16 @@ DIODE = Structure(loader.load('diode.txt')[0])
 AND = Structure(loader.load('doubleand.txt')[0])
 XOR = Structure(loader.load('xor.txt')[0])
 ADD = Structure(loader.load('add.txt')[0])
-BOMB = Structure(loader.load('bomb.txt')[0])
-with open('structs.json') as file:
-	pass#structs = json.load(file)
+BOMB = Structure(loader.load('bomb.txt')[0])'''
 
-structs = {
+with open('structs.json') as file:
+	structs_path = json.load(file)
+
+structs = dict()
+for k, path in structs_path.items():
+	structs[k] = Structure(loader.load(path)[0])
+
+'''structs = {
 	key.SEMICOLON: NOTHING,
 	key._1: BUBBLE[1],
 	key._2: BUBBLE[2],
@@ -41,13 +46,16 @@ structs = {
 	key._6: Structure(loader.load('sest.txt')[0]),
 	key.M: Structure(loader.load('memory.txt')[0]),
 	key.R: Structure(loader.load('rett.txt')[0]),
-}
+}'''
+
+
+structs_path = dict()
 
 
 
 
 
-struct = NOTHING
+struct = Structure([])
 struct.add()
 
 filename = None
@@ -92,6 +100,9 @@ def init():
 	@game.window.event
 	def on_key_press(symbol, modifiers):
 		global filename
+		
+		ss = key.symbol_string(symbol)
+		
 		if   symbol == key.F1:
 			loader.clear()
 			filename = None
@@ -127,6 +138,18 @@ def init():
 			bullet.speed_cons *=0.8
 		elif symbol == key.E:
 			bullet.speed_cons *= 1.25
+
+		elif modifiers & key.MOD_CTRL and symbol != 65507:
+			name = 'key-{}.txt'.format(ss)
+			loader.save(name)
+			structs[symbol] = loader.load(name)[0]
+			structs_path[ss] = name
+			with open('structs.json', 'w') as file:
+				json.dump(structs_path, file, indent=4, separators=(',', ': '))
+
+		elif ss in structs.keys():
+			change_struct(structs[ss])
+
 
 
 

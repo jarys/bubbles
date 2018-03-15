@@ -1,3 +1,13 @@
 {
-	
+	"SEMICOLON": "nothing.txt",
+    "_1": "bubble1.txt",
+    "_2": "bubble2.txt",
+    "_3": "bubble3.txt",
+    "_4": "bubble4.txt",
+    "O" : "or.txt",
+    "N" : "neg.txt",
+    "J" : "and.txt",
+    "K" : "double2.txt",
+    "X" : "xor.txt",
+    "Y" : "add.txt"
 }

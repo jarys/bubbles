@@ -18,7 +18,7 @@ def load(filename):
 				arr.append(Bubble((x, y), int(char)))
 
 	height = len(columns)
-	width = max(map(len, columns)) - 1 #for \n
+	width = max(map(len, columns), default=1) - 1 #for \n
 
 	return (arr, width, height)
 
@@ -32,11 +32,11 @@ def save(filename):
 	print('save', filename)
 	bubbles = game.bubbles.values()
 	get_x = lambda e: e.pos[0]
-	x_min = min(map(get_x, bubbles))
-	x_max = max(map(get_x, bubbles))
+	x_min = min(map(get_x, bubbles), default=0)
+	x_max = max(map(get_x, bubbles), default=0)
 	get_y = lambda e: e.pos[1]
-	y_min = min(map(get_y, bubbles))
-	y_max = max(map(get_y, bubbles))
+	y_min = min(map(get_y, bubbles), default=0)
+	y_max = max(map(get_y, bubbles), default=0)
 
 	with open('saves/' + filename, 'w') as file:
 		for y in range(y_max, y_min - 1, -1):
