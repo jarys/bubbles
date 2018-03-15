@@ -13,26 +13,30 @@ colors = [
 	(0, 1, 0, 1), #3 green
 	(0.3, 0.3, 1, 1) #4 blue
 ]
-es = 12 #explosion speed
+
+directions = [
+	Vec2(0, 1), Vec2(1, 0),
+	Vec2(0, -1), Vec2(-1, 0)
+]
 class Bubble(Entity):
 	def __init__(self, pos, lives=1):
 		super().__init__()
 		self.pos = pos
 		self.lives = lives
 
-	def damage(self):
+	def damage(self, distance=0):
 		if self.lives:
 			self.lives -= 1
 			if self.lives <= 0:
-				self.explode()
+				self.explode(distance)
 			return True
 		else:
 			return False
 
-	def explode(self):
+	def explode(self, d=0):
 		self.remove()
-		for v in ((0, es), (es, 0), (0, -es), (-es, 0)):
-			Bullet(Vec2(*self.pos), Vec2(*v)).add()
+		for v in directions:
+			Bullet(Vec2(*self.pos) - d*v, v).add()
 
 	def render(self):
 		primitives.circle(self.pos, 0.4*1.1**(-self.lives),
@@ -42,8 +46,19 @@ class Bubble(Entity):
 		game.bubbles[self.pos] = self
 
 	def outit(self):
-		del game.bubbles[self.pos]
+		try:
+			del game.bubbles[self.pos]
+		except KeyError:
+			print('KeyError on del Bubble')
 		#remove from group
+
+	@property
+	def x(self):
+		return self.pos[0]
+
+	@property
+	def y(self):
+		return self.pos[1]
 
 mouse = Vec2(0, 0)
 

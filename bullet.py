@@ -4,6 +4,7 @@ from engine.physics import Vec2
 from engine.entity import Entity
 
 
+speed_cons = 3
 class Bullet(Entity):
 	def __init__(self, pos, speed=Vec2(0, 0)):
 		super().__init__()
@@ -14,7 +15,8 @@ class Bullet(Entity):
 		return game.get_high_ii()
 
 	def update(self, dt):
-		self.pos += dt*self.speed
+		dp = dt*self.speed*speed_cons
+		self.pos += dp
 		if self.pos.length > 10000:
 			self.remove()
 
@@ -23,8 +25,12 @@ class Bullet(Entity):
 		y = int(y) - (1 if y < 0 else 0)
 		try:
 			bubble = game.bubbles[x, y]
-			if bubble.damage():
-				self.remove()
+			distance = max(abs(self.pos.x - x),
+						   abs(self.pos.y - y))
+			#print(distance)
+			if distance < max(abs(dp.x), abs(dp.y)):
+				if bubble.damage(distance):
+					self.remove()
 		except KeyError:
 			pass
 

@@ -2,12 +2,16 @@ import engine.game as game
 from engine.physics import Vec2
 from engine.event import Event
 from bullet import Bullet
-import bubble
+import bullet
 from bubble import Bubble, Structure
 from pyglet.window import mouse
 from pyglet.window import key
 import loader
 
+import json
+
+#key.symbol_string(key.O)
+NOTHING = Structure([])
 BUBBLE = [Structure([Bubble((0, 0), i)]) for i in range(5)]
 NEG = Structure(loader.load('doubleneg.txt')[0])
 OR = Structure(loader.load('doubleor.txt')[0])
@@ -16,7 +20,11 @@ AND = Structure(loader.load('doubleand.txt')[0])
 XOR = Structure(loader.load('xor.txt')[0])
 ADD = Structure(loader.load('add.txt')[0])
 BOMB = Structure(loader.load('bomb.txt')[0])
+with open('structs.json') as file:
+	pass#structs = json.load(file)
+
 structs = {
+	key.SEMICOLON: NOTHING,
 	key._1: BUBBLE[1],
 	key._2: BUBBLE[2],
 	key._3: BUBBLE[3],
@@ -32,11 +40,14 @@ structs = {
 	key._8: Structure(loader.load('osm.txt')[0]),
 	key._6: Structure(loader.load('sest.txt')[0]),
 	key.M: Structure(loader.load('memory.txt')[0]),
+	key.R: Structure(loader.load('rett.txt')[0]),
 }
 
 
 
-struct = BUBBLE[1]
+
+
+struct = NOTHING
 struct.add()
 
 filename = None
@@ -56,14 +67,15 @@ def init():
 		x = int(x) - (1 if x < 0 else 0)
 		y = int(y) - (1 if y < 0 else 0)
 		if button == mouse.LEFT:
-			try:
+			'''try:
 				l = game.bubbles[x, y].lives
 				l += 1
 				if l == 5:
 					l = 1
 				game.bubbles[x, y].lives = l
 			except KeyError:
-				struct.realize((x, y))
+				struct.realize((x, y))'''
+			struct.realize((x, y))
 
 		elif button == mouse.RIGHT:
 			try:
@@ -112,12 +124,9 @@ def init():
 			change_struct(structs[symbol])
 
 		elif symbol == key.Q:
-			if bubble.es > 1:
-				bubble.es -= 1
-			print('bullet speed', bubble.es)
+			bullet.speed_cons *=0.8
 		elif symbol == key.E:
-			bubble.es += 1
-			print('bullet speed', bubble.es)
+			bullet.speed_cons *= 1.25
 
 
 
