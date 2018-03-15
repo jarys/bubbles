@@ -51,6 +51,10 @@ python bubbles.py
 
 **comp{and|or|neg}.txt** jsou kompaktnější struktury pro signál 0/1
 
+## Proč
+
+Program vznikl v rámci snahy dokázat, že hra Bubble Blast 2 je NP kompletní.
+
 
 
 
